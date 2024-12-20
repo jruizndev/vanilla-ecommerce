@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vanilla Shop</title>
+        <link rel="stylesheet" href="./sass/main.scss" />
+    </head>
+    <body>
+        <header class="header">
+            <nav class="nav">
+                <div class="nav__logo">
+                    <h1>Vanilla Shop</h1>
+                </div>
+                <div class="nav__actions">
+                    <div class="search">
+                        <input
+                            type="text"
+                            placeholder="Search products..."
+                            class="search__input"
+                        />
+                    </div>
+                    <div class="cart">
+                        <button class="cart__button">
+                            🛒 <span class="cart__count">0</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <aside class="filters">
+                <div class="filters__section">
+                    <h3>Categories</h3>
+                    <div class="filters__categories">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </div>
+                <div class="filters__section">
+                    <h3>Price Range</h3>
+                    <div class="filters__price">
+                        <!-- Price filter will be here -->
+                    </div>
+                </div>
+            </aside>
+
+            <section class="products">
+                <div class="products__header">
+                    <h2>All Products</h2>
+                    <select class="products__sort">
+                        <option value="default">Sort by</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="name">Name</option>
+                    </select>
+                </div>
+                <div class="products__grid"></div>
+            </section>
+        </main>
+
+        <div class="cart-sidebar"></div>
+
+        <script type="module" src="./js/main.js"></script>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Gaming Laptop",
+            "price": 999.99,
+            "category": "electronics",
+            "image": "https://via.placeholder.com/200",
+            "description": "High performance gaming laptop"
+        },
+        {
+            "id": 2,
+            "name": "Smartphone",
+            "price": 699.99,
+            "category": "electronics",
+            "image": "https://via.placeholder.com/200",
+            "description": "Latest model smartphone"
+        }
+    ]
+}
