@@ -5,5 +5,5 @@ import Cart from '../components/Cart.js'
 document.addEventListener('DOMContentLoaded', () => {
     const productList = new ProductList()
     const cart = new Cart()
-    productList.loadProducts()
+    productList.setCart(cart)
 })

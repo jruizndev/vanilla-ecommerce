@@ -5,12 +5,32 @@ export default class ProductList extends Component {
     constructor() {
         super('.products__grid')
         this.products = []
+        this.cart = null // Referencia a Componente Cart
     }
 
-    /* Render the product list */
+    /* Método para conectar con el carrito */
+    setCart(cart) {
+        this.cart = cart
+    }
+
+    setupListeners() {
+        // Evento de click para agregar al carrito
+        this.element?.addEventListener('click', (e) => {
+            if (e.target.matches('.product-card__add-to-cart')) {
+                const productCard = e.target.closest('.product-card')
+                const productId = Number(productCard?.dataset.id)
+                const product = this.products.find((p) => p.id === productId)
+                if (product && this.cart) {
+                    this.cart.addToCart(product)
+                }
+            }
+        })
+    }
+
+    /* Renderiza la lista de productos */
     async init() {
         await this.loadProducts()
-        this.render()
+        this.setupListeners()
     }
 
     async loadProducts() {
@@ -18,6 +38,7 @@ export default class ProductList extends Component {
             const response = await fetch('data/products.json')
             const data = await response.json()
             this.products = data.products
+            this.render()
         } catch (error) {
             console.error('Error loading products:', error)
             this.products = []
