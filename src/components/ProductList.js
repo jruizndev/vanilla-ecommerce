@@ -5,7 +5,10 @@ export default class ProductList extends Component {
     constructor() {
         super('.products__grid')
         this.products = []
-        this.cart = null // Referencia a Componente Cart
+        this.filteredProducts = []
+        this.cart = null
+        this.searchInput = document.querySelector('.search__input')
+        this.searchTerm = ''
     }
 
     /* Método para conectar con el carrito */
@@ -25,6 +28,26 @@ export default class ProductList extends Component {
                 }
             }
         })
+
+        // Evento de cambio en el input de búsqueda
+        this.searchInput?.addEventListener('input', (e) => {
+            this.searchTerm = e.target.value.toLowerCase()
+            this.filterProducts()
+        })
+    }
+
+    /* Filtra los productos según la búsqueda */
+    filterProducts() {
+        if (!this.searchTerm.trim()) {
+            this.filteredProducts = [...this.products]
+        } else {
+            this.filteredProducts = this.products.filter(
+                (product) =>
+                    product.name.toLowerCase().includes(this.searchTerm) ||
+                    product.description.toLowerCase().includes(this.searchTerm)
+            )
+        }
+        this.render()
     }
 
     /* Renderiza la lista de productos */
@@ -38,10 +61,12 @@ export default class ProductList extends Component {
             const response = await fetch('data/products.json')
             const data = await response.json()
             this.products = data.products
+            this.filteredProducts = [...this.products]
             this.render()
         } catch (error) {
             console.error('Error loading products:', error)
             this.products = []
+            this.filteredProducts = []
         }
     }
 
@@ -49,7 +74,15 @@ export default class ProductList extends Component {
     render() {
         if (!this.element) return
 
-        this.element.innerHTML = this.products
+        if (this.filteredProducts.length === 0) {
+            this.element.innerHTML = `
+            <div class='products__empty'>
+            <p>No se encontraron productos que coincidan con la búsqueda.</p>
+            </div>`
+            return
+        }
+
+        this.element.innerHTML = this.filteredProducts
             .map(
                 (product) => `
                 <div class="product-card" data-id="${product.id}">
