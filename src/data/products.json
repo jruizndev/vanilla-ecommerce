@@ -5,21 +5,24 @@
             "name": "Smartphone XYZ",
             "price": 499.99,
             "image": "https://img.freepik.com/foto-gratis/composicion-creativa-carretes_23-2149711471.jpg?t=st=1736636825~exp=1736640425~hmac=3713f2cc3eb47781c7e2b5fc2e872e712716381d76002d7f6b2cb5c8261c8452&w=900",
-            "description": "Un smartphone increíble"
+            "description": "Un smartphone increíble",
+            "category": "Smartphones"
         },
         {
             "id": 2,
             "name": "Laptop ABC",
             "price": 999.99,
             "image": "https://img.freepik.com/foto-gratis/portatil-abierto-escritorio-estudio-linea-pantalla_1163-2578.jpg?t=st=1736636775~exp=1736640375~hmac=d9b88eacae95d86a1052a8d300a846543f6d1ea6b41c808075f5c845e65a5ce7&w=2000",
-            "description": "Una laptop potente"
+            "description": "Una laptop potente",
+            "category": "Portátiles"
         },
         {
             "id": 3,
             "name": "Tablet 123",
             "price": 299.99,
             "image": "https://img.freepik.com/foto-gratis/empleado-cultivo-tableta-lapiz_23-2147717381.jpg?t=st=1736636732~exp=1736640332~hmac=37e35e40fce9920582c875f9ff67c087acd28727b148900596281542e41f3687&w=2000",
-            "description": "Una tablet versátil"
+            "description": "Una tablet versátil",
+            "category": "Tabletas"
         }
     ]
 }

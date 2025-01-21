@@ -4,11 +4,66 @@ import Component from './Component.js'
 export default class ProductList extends Component {
     constructor() {
         super('.products__grid')
+        // Estados de la lista de productoså
         this.products = []
         this.filteredProducts = []
+
+        // Referencias a elementos del DOM
         this.cart = null
         this.searchInput = document.querySelector('.search__input')
+        this.priceRange = document.querySelector('.filters__price')
+        this.categoryFilters = document.querySelector('.filters__categories')
+
+        // Estados de filtros
         this.searchTerm = ''
+        this.selectedCategories = new Set()
+        this.maxPrice = 0
+        this.selectedPrice = Infinity
+    }
+
+    /* Método para cargar las categorías */
+    loadCategories() {
+        const categories = new Set(
+            this.products.map((product) => product.category)
+        )
+
+        this.categoryFilters.innerHTML = Array.from(categories)
+            .map(
+                (category) => `
+            <div class="filters__category">
+                <label class="filters__label">
+                    <input type="checkbox"
+                           class="filters__checkbox"
+                           value="${category}"
+                    >
+                    ${category}
+                </label>
+            </div>
+        `
+            )
+            .join('')
+    }
+
+    /* Método para filtrar por precio */
+    setupPriceFilter() {
+        this.maxPrice = Math.max(
+            ...this.products.map((product) => product.price)
+        )
+
+        this.priceRange.innerHTML = `
+        <div class="filters__price-control">
+            <input type="range"
+                   min="0"
+                   max="${this.maxPrice}"
+                   step="1"
+                   value="${this.maxPrice}"
+                   class="filters__price-slider"
+            >
+            <span class="filters__price-value">
+                Hasta ${this.maxPrice.toFixed(2)}€
+            </span>
+        </div>
+    `
     }
 
     /* Método para conectar con el carrito */
@@ -34,6 +89,52 @@ export default class ProductList extends Component {
             this.searchTerm = e.target.value.toLowerCase()
             this.filterProducts()
         })
+
+        // Listener para cambios en categorías
+        this.categoryFilters?.addEventListener('change', (e) => {
+            if (e.target.matches('.filters__checkbox')) {
+                if (e.target.checked) {
+                    this.selectedCategories.add(e.target.value)
+                } else {
+                    this.selectedCategories.delete(e.target.value)
+                }
+                this.applyFilters()
+            }
+        })
+
+        // Listener para cambios en el precio
+        this.priceRange?.addEventListener('input', (e) => {
+            if (e.target.matches('.filters__price-slider')) {
+                this.selectedPrice = Number(e.target.value)
+                e.target.nextElementSibling.textContent = `Hasta ${this.selectedPrice.toFixed(
+                    2
+                )}€`
+                this.applyFilters()
+            }
+        })
+    }
+
+    /* Método para aplicar filtros */
+    applyFilters() {
+        this.filteredProducts = this.products.filter((product) => {
+            // Filtro por búsqueda
+            const matchesSearch =
+                !this.searchTerm ||
+                product.name.toLowerCase().includes(this.searchTerm) ||
+                product.description?.toLowerCase().includes(this.searchTerm)
+
+            // Filtro por categoría
+            const matchesCategory =
+                this.selectedCategories.size === 0 ||
+                this.selectedCategories.has(product.category)
+
+            // Filtro por precio
+            const matchesPrice = product.price <= this.selectedPrice
+
+            return matchesSearch && matchesCategory && matchesPrice
+        })
+
+        this.render()
     }
 
     /* Filtra los productos según la búsqueda */
@@ -62,6 +163,8 @@ export default class ProductList extends Component {
             const data = await response.json()
             this.products = data.products
             this.filteredProducts = [...this.products]
+            this.loadCategories()
+            this.setupPriceFilter()
             this.render()
         } catch (error) {
             console.error('Error loading products:', error)
