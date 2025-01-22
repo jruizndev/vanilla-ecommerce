@@ -3,6 +3,14 @@
     padding: $spacing-md;
     border: 1px solid $border-color;
     border-radius: $border-radius;
+    input[type='checkbox'] {
+        cursor: pointer;
+    }
+
+    input[type='range'] {
+        width: 100%;
+        margin: $spacing-sm 0;
+    }
 
     &__section {
         margin-bottom: $spacing-lg;

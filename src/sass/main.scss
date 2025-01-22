@@ -1,14 +1,11 @@
 // Abstracts
 @import 'abstracts/variables';
 @import 'abstracts/mixins';
-@import 'abstracts/functions';
 
 // Base
 @import 'base/reset';
-@import 'base/typography';
 
 // Components
-@import 'components/buttons';
 @import 'components/card';
 @import 'components/cart';
 @import 'components/filters';
@@ -16,7 +13,6 @@
 // Layout
 @import 'layout/header';
 @import 'layout/grid';
-@import 'layout/sidebar';
 
 /* Layout */
 .main {
