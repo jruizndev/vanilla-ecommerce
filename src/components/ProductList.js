@@ -14,6 +14,10 @@ export default class ProductList extends Component {
         this.priceRange = document.querySelector('.filters__price')
         this.categoryFilters = document.querySelector('.filters__categories')
 
+        // Estados para ordenar los productosç
+        this.sortSelect = document.querySelector('.products__sort')
+        this.currentSort = 'default'
+
         // Estados de filtros
         this.searchTerm = ''
         this.selectedCategories = new Set()
@@ -112,6 +116,12 @@ export default class ProductList extends Component {
                 this.applyFilters()
             }
         })
+
+        // Listener para cambios en el orden
+        this.sortSelect?.addEventListener('change', (e) => {
+            this.currentSort = e.target.value
+            this.render()
+        })
     }
 
     /* Método para aplicar filtros */
@@ -173,31 +183,60 @@ export default class ProductList extends Component {
         }
     }
 
+    /* Método de ordenamiento */
+    sortProducts() {
+        // Si no hay criterio de ordenamiento, mantenemos el orden original
+        if (this.currentSort === 'default') {
+            return this.filteredProducts
+        }
+
+        // Creamos una copia para no modificar el array original
+        const sortedProducts = [...this.filteredProducts]
+
+        switch (this.currentSort) {
+            case 'price-asc':
+                return sortedProducts.sort((a, b) => a.price - b.price)
+            case 'price-desc':
+                return sortedProducts.sort((a, b) => b.price - a.price)
+            case 'name':
+                return sortedProducts.sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                )
+            default:
+                return sortedProducts
+        }
+    }
+
     /* Show the product list */
     render() {
         if (!this.element) return
 
         if (this.filteredProducts.length === 0) {
             this.element.innerHTML = `
-            <div class='products__empty'>
-            <p>No se encontraron productos que coincidan con la búsqueda.</p>
-            </div>`
+                <div class="products__empty">
+                    <p>No se encontraron productos que coincidan con la búsqueda.</p>
+                </div>`
             return
         }
 
-        this.element.innerHTML = this.filteredProducts
+        // Obtenemos productos ordenados
+        const productsToRender = this.sortProducts()
+
+        this.element.innerHTML = productsToRender
             .map(
                 (product) => `
                 <div class="product-card" data-id="${product.id}">
-                    <img src="${product.image}" alt="${
-                    product.name
-                }" class="product-card__image">
+                    <img src="${product.image}" 
+                         alt="${product.name}" 
+                         class="product-card__image">
                     <div class="product-card__info">
                         <h3 class="product-card__name">${product.name}</h3>
-                        <p class="product-card__price">${product.price.toFixed(
-                            2
-                        )} €</p>
-                        <button class="product-card__add-to-cart">Add to Cart</button>
+                        <p class="product-card__price">
+                            ${product.price.toFixed(2)} €
+                        </p>
+                        <button class="product-card__add-to-cart">
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
             `
