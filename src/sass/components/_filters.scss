@@ -1,0 +1,14 @@
+.filters {
+    width: 250px;
+    padding: $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+
+    &__section {
+        margin-bottom: $spacing-lg;
+
+        h3 {
+            margin-bottom: $spacing-md;
+        }
+    }
+}

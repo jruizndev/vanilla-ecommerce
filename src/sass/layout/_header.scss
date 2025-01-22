@@ -1,0 +1,59 @@
+.header {
+    background: #fff;
+    box-shadow: 0 2px 4px $shadow-color;
+
+    .nav {
+        @include flex(row, space-between, center);
+        padding: $spacing-md;
+        max-width: $container-width;
+        margin: 0 auto;
+
+        &__logo {
+            h1 {
+                font-size: 1.5rem;
+                color: $primary-color;
+            }
+        }
+
+        &__actions {
+            @include flex(row, flex-end, center);
+            gap: $spacing-md;
+        }
+    }
+}
+
+.search {
+    &__input {
+        padding: $spacing-sm $spacing-md;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        outline: none;
+
+        &:focus {
+            border-color: $primary-color;
+        }
+    }
+}
+
+.cart {
+    &__button {
+        padding: $spacing-sm $spacing-md;
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+    }
+
+    &__count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: $primary-color;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        @include flex(row, center, center);
+        font-size: 12px;
+    }
+}

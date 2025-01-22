@@ -1,0 +1,19 @@
+@mixin flex($direction: row, $justify: flex-start, $align: flex-start) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin card-hover {
+    transition: transform 0.2s ease;
+    &:hover {
+        transform: translateY(-5px);
+    }
+}
+
+@mixin responsive($breakpoint) {
+    @media screen and (min-width: $breakpoint) {
+        @content;
+    }
+}
