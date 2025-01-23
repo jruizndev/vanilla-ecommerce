@@ -8,6 +8,10 @@ export default class Cart extends Component {
         this.cartCount = document.querySelector('.cart__count')
         this.cartButton = document.querySelector('.cart__button')
         this.closeButton = document.querySelector('.cart-sidebar__close')
+        this.notification = document.getElementById('cart-notification')
+        this.notificationMessage = this.notification?.querySelector(
+            '.notification__message'
+        )
         this.setupListeners()
     }
 
@@ -61,14 +65,36 @@ export default class Cart extends Component {
         localStorage.setItem('cart', JSON.stringify(this.items))
     }
 
+    /* Método para mostrar notificaciones */
+    showNotification(message, type = 'success') {
+        // Si no hay notificación, salir de la función
+        if (!this.notification || !this.notificationMessage) return
+
+        // Establecer el mensaje
+        this.notificationMessage.textContent = message
+
+        // Añadimos las clases necesarias
+        this.notification.classList.add('notification--show')
+        this.notification.classList.add(`notification--${type}`)
+
+        // Ocultar la notificación después de 3 segundos
+        setTimeout(() => {
+            this.notification.classList.remove('notification--show')
+            this.notification.classList.remove(`notification--${type}`)
+        }, 3000)
+    }
+
     /* Añadir un producto al carrito */
     addToCart(product) {
         const existingItem = this.items.find((item) => item.id === product.id)
         if (existingItem) {
             existingItem.quantity += 1
+            this.showNotification(`Añadida una unidad más de ${product.name}`)
         } else {
             this.items.push({ ...product, quantity: 1 })
+            this.showNotification(`${product.name} añadido al carrito`)
         }
+
         this.updateCartCount()
         this.render()
         this.saveCartToStorage()
@@ -76,7 +102,16 @@ export default class Cart extends Component {
 
     /* Eliminar un producto del carrito */
     removeFromCart(productId) {
+        // Guardamos el nombre antes de eliminar
+        const product = this.items.find((item) => item.id === productId)
+        if (!product) return
+
+        // Eliminamos el producto
         this.items = this.items.filter((item) => item.id !== productId)
+
+        // Mostramos notificación
+        this.showNotification(`${product.name} eliminado del carrito`, 'error')
+
         this.updateCartCount()
         this.render()
         this.saveCartToStorage()
