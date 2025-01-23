@@ -91,5 +91,23 @@
                 opacity: 0.7;
             }
         }
+
+        &__quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .quantity-btn {
+                padding: 0.25rem 0.5rem;
+                border: 1px solid $border-color;
+                background: white;
+                cursor: pointer;
+
+                &:hover {
+                    background: $primary-color;
+                    color: white;
+                }
+            }
+        }
     }
 }
