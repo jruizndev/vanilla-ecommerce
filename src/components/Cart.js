@@ -21,12 +21,24 @@ export default class Cart extends Component {
         this.cartButton?.addEventListener('click', () => this.toggleCart())
         this.closeButton?.addEventListener('click', () => this.toggleCart())
 
-        // Evento click en el botón de eliminar un producto
+        // Eventos de los items del carrito (eliminar y cambiar cantidad)
         this.element?.addEventListener('click', (e) => {
+            // Manejo del botón eliminar
             if (e.target.matches('.cart-item__remove')) {
                 const cartItem = e.target.closest('.cart-item')
                 const productId = Number(cartItem?.dataset.id)
                 if (productId) this.removeFromCart(productId)
+            }
+
+            // Manejo de botones de cantidad
+            if (e.target.matches('.quantity-btn')) {
+                const cartItem = e.target.closest('.cart-item')
+                const productId = Number(cartItem?.dataset.id)
+                const action = e.target.dataset.action
+
+                if (productId && action) {
+                    this.updateQuantity(productId, action)
+                }
             }
         })
     }
@@ -77,6 +89,28 @@ export default class Cart extends Component {
         }
     }
 
+    /* Método para actualizar la cantidad de un producto en el carrito */
+    updateQuantity(productId, action) {
+        // Buscar el ítem en el carrito
+        const item = this.items.find((item) => item.id === productId)
+        if (!item) return
+
+        // Actualizar la cantidad
+        if (action === 'increase') {
+            item.quantity += 1
+        } else if (action === 'decrease') {
+            item.quantity -= 1
+            if (item.quantity <= 0) {
+                return this.removeFromCart(productId)
+            }
+        }
+
+        // Actualizamos UI Y localStorage
+        this.updateCartCount()
+        this.render()
+        this.saveCartToStorage()
+    }
+
     /* Renderizar el carrito */
     render() {
         if (!this.element) return
@@ -90,6 +124,11 @@ export default class Cart extends Component {
                 }" class="cart-item__image">
                 <div class="cart-item__details">
                     <h4>${item.name}</h4>
+                    <div class='cart-item__quantity'>
+                    <button class='quantity-btn minus' data-action='decrease'>-</button>
+                    <span class='quantity'>${item.quantity}</span>
+                    <button class='quantity-btn plus' data-action='increase'>+</button>
+                    </div>
                     <p>${item.price.toFixed(2)} € x ${item.quantity}</p>
                 </div>
                 <button class="cart-item__remove">×</button>
